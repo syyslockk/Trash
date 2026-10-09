@@ -1,0 +1,11 @@
+pandas
+requests
+numpy
+sklearn.preprocessing
+sklearn.metrics
+scipy.ndimage
+plotly.graph_objects
+webbrowser
+argparse
+json
+os
