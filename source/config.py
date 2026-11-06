@@ -34,6 +34,10 @@ GP_GROUPS = {
 
 SATCAT_FILE = "satcat.csv"
 META_FILE = "meta.json"
+OBJECTS_FILE = "objects.csv"   # результат processing в data/processed
+
+# Группа GP с действующими спутниками; остальные группы - облака обломков
+GP_ACTIVE_GROUP = "active"
 
 
 def gp_filename(group: str) -> str:

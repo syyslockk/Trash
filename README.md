@@ -60,6 +60,12 @@ python -m source.loader
 python -m source.loader --force
 ```
 
+Обработка (объединяет SATCAT и GP, оставляет низкие орбиты, пишет `data/processed/objects.csv`):
+
+```bash
+python -m source.processing
+```
+
 Весь конвейер без окна:
 
 ```bash
@@ -72,7 +78,7 @@ python main.py --cli
 python -m pytest
 ```
 
-Готово: загрузка (`loader`). В разработке: `processing`, `analysis`, `visualization`, GUI.
+Готово: загрузка (`loader`) и обработка (`processing`). В разработке: `analysis`, `visualization`, GUI.
 
 ## Данные
 
@@ -83,6 +89,21 @@ python -m pytest
 | `data/raw/meta.json` | - | дата скачивания, адрес и число строк каждого файла |
 
 Облака обломков: Fengyun-1C (2007), Iridium-33 и Cosmos-2251 (2009), Cosmos-1408 (2021).
+
+### `data/processed/objects.csv`
+
+Одна строка - один объект на низкой орбите (средняя высота 160-2000 км). Основа - SATCAT; если объект есть в GP-группах, высоты пересчитаны по его элементам орбиты (третий закон Кеплера), добавлены RAAN и эпоха.
+
+| Колонка | Что это |
+|---|---|
+| `norad_id`, `object_name` | номер в каталоге NORAD и название |
+| `object_type` | тип из SATCAT: PAY (спутник), R/B (ракетная ступень), DEB (обломок), UNK |
+| `category` | `active_satellite`, `inactive_payload`, `rocket_body`, `debris`, `unknown` или облако обломков (`fengyun_1c_debris` и т. д.) |
+| `is_active` | действующий ли спутник |
+| `perigee_km`, `apogee_km`, `mean_alt_km` | высоты над Землёй, км |
+| `inclination_deg`, `eccentricity` | наклонение и эксцентриситет |
+| `raan_deg`, `epoch` | долгота восходящего узла и эпоха элементов (только для объектов из GP) |
+| `source` | откуда взяты высоты: `gp` или `satcat` |
 
 ## Ограничения модели
 

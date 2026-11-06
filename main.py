@@ -14,15 +14,17 @@ from source import config
 
 def run_cli(force: bool) -> int:
     from source.loader.celestrak import LoaderError, load_all
+    from source.processing.clean import ProcessingError, process, save
 
     log = logging.getLogger("main")
     try:
         load_all(force=force)
-    except LoaderError as exc:
+        save(process())
+    except (LoaderError, ProcessingError) as exc:
         log.error("%s", exc)
         return 1
-    # Следующие шаги (processing, analysis, visualization) появятся здесь
-    log.info("Конвейер: пока реализована только загрузка данных")
+    # Следующие шаги (analysis, visualization) появятся здесь
+    log.info("Конвейер: пока реализованы загрузка и обработка данных")
     return 0
 
 

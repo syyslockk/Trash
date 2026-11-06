@@ -199,7 +199,9 @@ def load_all(
 
 def read_satcat(raw_dir: Optional[Path] = None) -> pd.DataFrame:
     """Читает скачанный SATCAT. Пустые поля (например, DECAY_DATE) становятся NaN."""
-    return pd.read_csv(Path(raw_dir or config.RAW_DIR) / config.SATCAT_FILE)
+    # Только пустая строка - пропуск: иначе pandas превратит в NaN, например, имя "NA"
+    return pd.read_csv(Path(raw_dir or config.RAW_DIR) / config.SATCAT_FILE,
+                       keep_default_na=False, na_values=[""])
 
 
 def read_gp(group: str, raw_dir: Optional[Path] = None) -> pd.DataFrame:
