@@ -13,18 +13,22 @@ from source import config
 
 
 def run_cli(force: bool) -> int:
+    from source.analysis import pipeline
     from source.loader.celestrak import LoaderError, load_all
     from source.processing.clean import ProcessingError, process, save
 
     log = logging.getLogger("main")
     try:
-        load_all(force=force)
-        save(process())
+        meta = load_all(force=force)
+        objects = process()
+        save(objects)
     except (LoaderError, ProcessingError) as exc:
         log.error("%s", exc)
         return 1
-    # Следующие шаги (analysis, visualization) появятся здесь
-    log.info("Конвейер: пока реализованы загрузка и обработка данных")
+    data_date = meta["files"].get(config.SATCAT_FILE, {}).get("downloaded_at")
+    pipeline.save(pipeline.run(objects, data_date=data_date))
+    # Следующий шаг (visualization) появится здесь
+    log.info("Конвейер: готовы загрузка, обработка и анализ")
     return 0
 
 

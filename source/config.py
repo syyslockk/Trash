@@ -81,13 +81,40 @@ INC_MIN, INC_MAX, INC_STEP = 0, 180, 2       # градусы
 CLUSTER_FEATURES = ["mean_alt_km", "inclination_deg"]
 HDBSCAN_MIN_CLUSTER_SIZE = 15
 HDBSCAN_MIN_SAMPLES = 5
+SILHOUETTE_SAMPLE = 10000   # silhouette по случайной выборке, иначе считается долго
+RANDOM_SEED = 0
+
+# --- Проверка кластеров по известным облакам обломков ---
+CLOUD_NAMES = {
+    "fengyun_1c_debris": "Fengyun-1C (2007)",
+    "iridium_33_debris": "Iridium-33 (2009)",
+    "cosmos_2251_debris": "Cosmos-2251 (2009)",
+    "cosmos_1408_debris": "Cosmos-1408 (2021)",
+}
+MIN_EVENT_OBJECTS = 20   # облака, где обломков меньше, не проверяем
 
 # --- Модель риска ---
 SIGMA_KM2 = 1e-5        # условное сечение, на относительный индекс не влияет
 N_NODE_STEPS = 72       # шагов усреднения по разности RAAN
 SMOOTH_SIGMA = 1.0      # gaussian_filter плотности обломков (в клетках)
 SHELL_THRESHOLD = 0.25  # слои с риском > 25% от максимума -> «оболочки» на 3D
+MAX_SHELLS = 5
 TOP_N = 10              # строк в таблицах топ-зон и топ-объектов
+HAZARD_ZONE_MIN_TARGETS = 5   # в топ зон по hazard - только клетки, где летает хотя бы столько целей
+# Модель считает орбиты круговыми, поэтому сильно вытянутые в риск не берём
+RISK_MAX_ECCENTRICITY = 0.1
+# Источник опасности - обломки (object_type DEB).
+# Цели - действующие спутники и ракетные ступени (R/B).
+
+# --- Файлы analysis в data/processed ---
+CLUSTERED_FILE = "clustered.csv"
+RISK_GRID_FILE = "risk_grid.csv"
+RISK_PROFILE_FILE = "risk_profile.csv"
+TOP_ZONES_FILE = "top_zones.csv"
+TOP_HAZARD_ZONES_FILE = "top_hazard_zones.csv"
+TOP_OBJECTS_FILE = "top_objects.csv"
+CLUSTERS_FILE = "clusters.csv"
+VALIDATION_FILE = "validation.json"
 
 # --- Логирование ---
 LOG_FORMAT = "%(asctime)s %(levelname)-7s %(name)s: %(message)s"
