@@ -1,0 +1,18 @@
+# Данные: скачиваются и пересчитываются, в репозиторий не кладём
+data/raw/*
+data/processed/*
+data/legacy/
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# IDE и система
+.idea/
+.vscode/
+.DS_Store
